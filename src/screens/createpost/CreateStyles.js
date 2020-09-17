@@ -2,7 +2,6 @@ import {Text, View, StyleSheet} from "react-native"
 import colors from "../../themes/Colors";
 
 const styles = StyleSheet.create({
-
   
     view_top:{
          flexDirection: "row",

@@ -1,33 +1,43 @@
-import React from 'react';
+ import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
+  Dimensions, Image,
+  ScrollView, Text,
+
+
+
+
+  TouchableOpacity, View
 } from 'react-native';
-import styles from './ProStyles';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import { default as FontAwesome, default as Icon } from 'react-native-vector-icons/FontAwesome';
+import Foundation from 'react-native-vector-icons/Foundation';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useDispatch } from 'react-redux';
+import { removeAuth } from '../../actions/authAction';
 import colors from '../../themes/Colors';
 import metrics from '../../themes/Metrics';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import AntDMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Foundation from 'react-native-vector-icons/Foundation';
-import Entypo from 'react-native-vector-icons/Entypo';
+import styles from './ProStyles';
 
-export default function () {
+export default function ProfileScreen() {
+  
   var screenHeight = Dimensions.get('window').height;
+  const dispatch = useDispatch();
+  const onLogout = () => {
+    try {
+      dispatch(removeAuth());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ScrollView style={{minHeight: screenHeight}}>
       <View
         style={{
           flexDirection: 'column',
           backgroundColor: colors.frost,
-          paddingBottom:"100%",
+          paddingBottom: '100%',
         }}>
         <View style={styles.view_top}>
           <View>
@@ -93,8 +103,13 @@ export default function () {
           </View>
 
           <View style={styles.profile}>
-            <Entypo name="log-out" size={25} color="red" />
-            <TouchableOpacity>
+            <Entypo
+              onPress={() => onLogout()}
+              name="log-out"
+              size={25}
+              color="red"
+            />
+            <TouchableOpacity onPress={() => onLogout()}>
               <Text style={{padding: metrics.baseMargin}}>Logout</Text>
             </TouchableOpacity>
           </View>

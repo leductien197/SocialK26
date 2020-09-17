@@ -1,50 +1,153 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import colors from '../../themes/Colors';
-import metrics from '../../themes/Metrics';
-import styles from './CreateStyles';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView 
+} from 'react-native';
+import {Fonts, Metrics, Colors} from '../../themes';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import ImagePicker from 'react-native-image-picker';
+import {createPost} from '../../service/Api';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function CreatePost() {
+// react-native-image-picker sample_1
+const options = {
+  title: 'Select Avatar',
+  customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 
-  var screenHeight = Dimensions.get('window').height;
+export default function CreatePost({navigation}) {
+  const [data, setData] = useState({});
+  const [imagePicker, setImagePicker] = useState({});
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => onPost()}
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: 10,
+          }}>
+          <Ionicons name={'send'} size={30} color={'green'} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, imagePicker, data]);
+
+  const onChangeText = (value) => {
+    setData((prev) => ({...data, content: value}));
+  };
+
+  // react-native-image-picker sample_2
+  const onUpload = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {
+          uri: String(response.uri),
+          name: String(response.fileName),
+          type: String(response.type),
+        };
+        setImagePicker(source);
+      }
+    });
+  };
+
+  const onPost = async () => {
+    let form = new FormData();
+    form.append('title', 'Ha Noi');
+    form.append('content', data.content);
+    form.append('location', 'Ha Noi');
+    imagePicker && imagePicker.uri && form.append('imageUrl', imagePicker);
+
+    try {
+      const result = await createPost(form);
+      if (result.status === 200) {
+        navigation.pop();
+      }
+      console.log('result1111', result);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   return (
-
-    <ScrollView style={{ minHeight: screenHeight }}>
-      <View style={styles.view_top}>
-        <View>
-          <Text>
-            <Icon name="arrow-left" size={30} color={colors.snow} />
-          </Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <View style={{flex: 1}}>
+        <View style={{padding: 20}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={{
+                uri: 'https://i.ytimg.com/vi/49ttxlWY6VA/maxresdefault.jpg',
+              }}
+              // source={{ uri: getImageUrl(user && user.avatar_url) }}
+              style={{height: 60, width: 60, borderRadius: 30, marginRight: 10}}
+            />
+            <View style={{flex: 1}}>
+              <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                {/* {user && user.user_name} */}Cee
+              </Text>
+            </View>
+            {/* <TouchableOpacity onPress={onPost}>
+            <Text style={{color: 'red', fontSize: 20}}>post</Text>
+          </TouchableOpacity> */}
+          </View>
         </View>
-        <View>
-          <Text style={{fontSize: 30, color: colors.snow, marginLeft: 30}}>
-            CREATE POST
-          </Text>
+        <TextInput
+          style={{
+            height: 40,
+            borderColor: 'gray',
+            borderWidth: 1,
+            flex: 1,
+            textAlignVertical: 'top',
+            fontSize: 18,
+          }}
+          onChangeText={text => onChangeText(text)}
+          value={data.content}
+          placeholder={`What's on your mind?`}
+          multiline={true}
+        />
+        {imagePicker && imagePicker.uri && (
+          <Image
+            source={{uri: imagePicker.uri}}
+            resizeMode="cover"
+            style={{height: 100, width: '100%'}}
+          />
+        )}
+        <View
+          style={{justifyContent: 'center', alignItems: 'center', height: 50}}>
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={() => onUpload()}>
+            <Text>Add your post</Text>
+            <MaterialIcons
+              name="photo-camera"
+              size={20}
+              color={Colors.facebook}
+              style={{marginLeft: 10}}
+            />
+          </TouchableOpacity>
         </View>
       </View>
-
-      <View style={styles.view_user}>
-        <View>
-          <Text>
-            <Icon name="instagram" size={50} color={colors.darkRed} />
-          </Text>
-        </View>
-        <View>
-          <Text style={{paddingLeft:15, fontSize:20}}>user admin</Text>
-        </View>
-      </View>
-      <View styles={styles.view_input}>
-        <TextInput style={styles.input} placeholder="bạn đang nghĩ gì" />
-      </View>
-      <View style={styles.view_bottom}>
-        <View>
-          <Icon name="instagram" size={30} color="#900" />
-        </View>
-        <View>
-          <Text style={{color:colors.darkRed, paddingLeft:15}}>Photo</Text>
-        </View>
-      </View>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

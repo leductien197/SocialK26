@@ -1,10 +1,10 @@
 import * as actionTypes from './actionType';
 
 // file này chứa Key và Data để gửi đi vào reducer xử lí
-export const setAuth = (detail) => {
+export const setAuth = (token) => {
     return {
         type: actionTypes.SET_AUTH,
-        detail,
+        token,
     };
 };
 export const removeAuth = () => {
@@ -13,3 +13,9 @@ export const removeAuth = () => {
     };
 };
 
+export const setMe = (user) => {
+    return {
+        type: actionTypes.SET_ME,
+        user
+    }
+}

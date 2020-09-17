@@ -6,7 +6,7 @@ import Item from './src/components/Item';
 import RegisterScreen from './src/screens/register/RegisterScreen';
 import CreatePost from './src/screens/createpost/CreatePost';
 import Profile from './src/screens/profile/Profile';
-
+import AppContainer from './src/appNavigation/AppContainer';
 
 //redux
 import {applyMiddleware, compose} from 'redux';
@@ -29,13 +29,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  //sẽ persist
+  // sẽ persist
   // whitelist: [
   //   'accountReducer'
   // ],
-  //ko persist
+  // khong persist
   blacklist: [
-    // 'late'
+    // 'late', 'auth'
   ],
 };
 
@@ -44,14 +44,14 @@ const persistConfig = {
 // let reducer = persistCombineReducers(config, allReducers)
 const persistedReducer = persistReducer(persistConfig, allReducers);
 
-let store = createStore(persistedReducer);
+export let store = createStore(persistedReducer);
 let persistor = persistStore(store);
 
 export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Profile />
+        <AppContainer />
       </PersistGate>
     </Provider>
   );

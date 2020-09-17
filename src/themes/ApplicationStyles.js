@@ -2,8 +2,8 @@ import Fonts from './Fonts'
 import Metrics from './Metrics'
 import Colors from './Colors'
 
-// This file is for a reusable grouping of Theme items.
-// Similar to an XML fragment layout in Android
+// This file is for a reusable grouping of Theme items. - Tệp này dành cho nhóm các mục Chủ đề có thể sử dụng lại.
+// Similar to an XML fragment layout in Android. - Tương tự như bố cục phân đoạn XML trong Android
 
 const ApplicationStyles = {
   screen: {
