@@ -7,7 +7,7 @@ import { getAllPost, getMe } from '../../service/Api';
 import {setMe} from '../../actions/authAction'
 import { Colors, Metrics } from '../../themes';
 import {useSelector, useDispatch} from 'react-redux'
-import Reactotron from 'reactotron-react-native';
+
 
 const arrImages = [
   'https://therightsofnature.org/wp-content/uploads/2018/01/turkey-3048299_1920-1366x550.jpg',
@@ -105,7 +105,7 @@ export default function Home(props) {
         data={data}
         ListHeaderComponent={header}
         renderItem={renderItem}
-        keyExtractor={(item) => item._id.toString()}
+        keyExtractor={(item) => item._id}
       />
     </View>
   );

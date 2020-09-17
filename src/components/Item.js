@@ -21,21 +21,21 @@ export default function Item(props) {
     console.log('user', user)
     // const isLiked = item.likes.includes(user._id)
 
-    const onLike = async () => {
-      const cloneItemState = {...item}
-      const checkIncludeLike = cloneItemState.likes.includes(user._id)
-      const newArrLike = checkIncludeLike ? cloneItemState.likes.filter(e => e!== user._id) : cloneItemState.likes.concat([user._id])
+  //   const onLike = async () => {
+  //     const cloneItemState = {...item}
+  //     const checkIncludeLike = cloneItemState.likes.includes(user._id)
+  //     const newArrLike = checkIncludeLike ? cloneItemState.likes.filter(e => e!== user._id) : cloneItemState.likes.concat([user._id])
 
-      try {
-        const result = await updatePost({
-          postId: item._id,
-          like: user._id
-        })
-        setItem(prev => ({...prev, likes: newArrLike}))             
-      } catch (error) {
-        console.log('error', error)
-      }
-  } 
+  //     try {
+  //       const result = await updatePost({
+  //         postId: item._id,
+  //         like: user._id
+  //       })
+  //       setItem(prev => ({...prev, likes: newArrLike}))             
+  //     } catch (error) {
+  //       console.log('error', error)
+  //     }
+  // } 
 
   return (
     <TouchableOpacity >
@@ -78,7 +78,7 @@ export default function Item(props) {
         margin: Metrics.baseMargin
       }}>
         <TouchableOpacity
-          onPress={onLike}
+          // onPress={onLike}
           style={{ flexDirection: 'row', alignItems: 'center' }}>
             {/* <AntDesign  name= {isLiked ? "like1" : 'like2'} size={30} color={ isLiked ? Colors.facebook : 'black'} /> */}
             <Text>{item.likes.length}</Text>

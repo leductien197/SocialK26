@@ -13,6 +13,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-picker';
 import {createPost} from '../../service/Api';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {getAllPost} from '../../service/Api'
 
 // react-native-image-picker sample_1
 const options = {
@@ -61,9 +62,9 @@ export default function CreatePost({navigation}) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {
-          uri: String(response.uri),
-          name: String(response.fileName),
-          type: String(response.type),
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
         };
         setImagePicker(source);
       }
@@ -86,6 +87,21 @@ export default function CreatePost({navigation}) {
     } catch (error) {
       console.log('error', error);
     }
+
+  //    React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //        const getPosts = async () => {
+  //          const result = await getAllPost();
+  //          setData(result.data.data);
+  //        };
+  //        getPosts();
+  //     // The screen is focused
+  //     // Call any action
+  //   });
+
+  //   // Return the function to unsubscribe from the event so it gets removed on unmount
+  //   return unsubscribe;
+  // }, [navigation]);
   };
 
   return (
@@ -107,9 +123,6 @@ export default function CreatePost({navigation}) {
                 {/* {user && user.user_name} */}Cee
               </Text>
             </View>
-            {/* <TouchableOpacity onPress={onPost}>
-            <Text style={{color: 'red', fontSize: 20}}>post</Text>
-          </TouchableOpacity> */}
           </View>
         </View>
         <TextInput
